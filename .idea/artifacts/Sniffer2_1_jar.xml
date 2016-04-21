@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Sniffer2.1:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sniffer2_1_jar</output-path>
+    <root id="archive" name="Sniffer2.1.jar">
+      <element id="module-output" name="Sniffer2.1" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../jSSC-2.7.0-Release/jssc.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
