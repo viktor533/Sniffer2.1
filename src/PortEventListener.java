@@ -29,8 +29,6 @@ public class PortEventListener implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
         whiler.setLastAcceptedTime(System.currentTimeMillis());
         listener.accept(event);
-
-
     }
 
 }

@@ -1,7 +1,5 @@
-import java.io.IOException;
-
 /**
- * Главный класс
+ * Главный класс.
  * Created by viktor on 4/15/16.
  */
 public class Main {
@@ -14,5 +12,4 @@ public class Main {
         console.run();
 
     }
-
 }

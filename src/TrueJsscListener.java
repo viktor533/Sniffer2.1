@@ -39,6 +39,9 @@ public class TrueJsscListener {
     /** Флаг, определяющий, будет ли происходить пересылка принятных байтов по одному */
     protected boolean isRetransmitByByte;
 
+    /**
+     * Выставляет настройки поумолчанию
+     */
     private void defaultSettings() {
         isPackage = false;
         isRetransmit = false;
@@ -48,12 +51,24 @@ public class TrueJsscListener {
         out = System.out;
     }
 
+    /**
+     * Конструктор выставляет настройки поумолчанию, принимает слушаемый прот и время старта программы.
+     * @param port слушаемый порт
+     * @param startTme время старта программы в милисеккундах
+     */
     public TrueJsscListener(SerialPort port, long startTme) {
         defaultSettings();
         this.port = port;
         this.startTime = startTme;
     }
 
+    /**
+     * Конструктор высталяет настройки по умолчанию, и формаирует слуателя в соответсвии с принимаемыми параметрами
+     * @param port слушаемый порт
+     * @param startTme время начала работы программы
+     * @param isRetransmit флаг, указывающий нужно ли делать ретрансляцию сообщений
+     * @param isRetransmitByByte флаг,указываюший нужно делать ретрансляцию по байтам
+     */
     public TrueJsscListener(SerialPort port, long startTme, boolean isRetransmit, boolean isRetransmitByByte) {
         defaultSettings();
         this.isRetransmit = isRetransmit;
@@ -62,6 +77,14 @@ public class TrueJsscListener {
         this.startTime = startTme;
     }
 
+    /**
+     * Конструктор высталяет настройки по умолчанию, и формаирует слуателя в соответсвии с принимаемыми параметрами
+     * @param port слушаемый порт
+     * @param startTme время начала работы программы
+     * @param out поток вывода лога
+     * @param isRetransmit флаг, указывающий нужно ли делать ретрансляцию сообщений
+     * @param isRetransmitByByte флаг,указываюший нужно делать ретрансляцию по байтам
+     */
     public TrueJsscListener(SerialPort port, long startTme, PrintStream out, boolean isRetransmit, boolean isRetransmitByByte) {
         defaultSettings();
         this.out = out;
@@ -71,6 +94,15 @@ public class TrueJsscListener {
         this.startTime = startTme;
     }
 
+    /**
+     * Конструктор высталяет настройки по умолчанию, и формаирует слуателя в соответсвии с принимаемыми параметрами
+     * @param port слушаемый порт
+     * @param startTme время начала работы программы
+     * @param retransmitPort порт из которого будет происходить пересылка сообщений
+     * @param out поток вывода лога
+     * @param isRetransmit флаг, указывающий нужно ли делать ретрансляцию сообщений
+     * @param isRetransmitByByte флаг,указываюший нужно делать ретрансляцию по байтам
+     */
     public TrueJsscListener(SerialPort port, long startTme, SerialPort retransmitPort, PrintStream out, boolean isRetransmit, boolean isRetransmitByByte) {
         defaultSettings();
         this.retransmitPort = retransmitPort;
@@ -81,21 +113,42 @@ public class TrueJsscListener {
         this.startTime = startTme;
     }
 
+    /**
+     * Устанавливает поток вывода, в который будет записываться лог слушателя
+     * @param out поток вывода лога
+     */
     public void setOutLog(PrintStream out) {
         this.out = out;
     }
 
+    /**
+     * Преобразует время от старта программы, от числа к строчке и выставляет точку
+     * @return строчка, содержащее вреия от старта программы в секкундах
+     */
     private String outTime(){
         return ""+(System.currentTimeMillis()- startTime) / 1000 + "."+ (System.currentTimeMillis()- startTime)%1000;
     }
 
+    /**
+     * Возвращает префикс лога. содержаший информацию о порте и время от сарта программы
+     * @return префикс лога
+     */
     private String outPrefix() {
         return (port.getPortName() + ", " + outTime() + ": ");
     }
 
+    /**
+     * Устанавливает порт, в который, при необходимости, будет произсодить ретрансляция
+     * @param retransmitPort Порт в который будет происходить ретрансляция
+     */
     public void  setRetransmitPort(SerialPort retransmitPort) {
         this.retransmitPort = retransmitPort;
     }
+
+    /**
+     * Устанавливает или выклчает режим ретрансляции со сброкой сообщений
+     * @param isRetransmitor флаг того, будет ли происходить ретрансляция
+     */
     public void setIsRetransmit(boolean isRetransmitor) {
         this.isRetransmit = isRetransmitor;
         if (isRetransmitor && isRetransmitByByte) {
@@ -103,6 +156,10 @@ public class TrueJsscListener {
         }
     }
 
+    /**
+     * Устанавливает или выключает режим ретрансляции по байту (принял - сразу передал)
+     * @param retransmitByByte флаг того, будет ли происходить ретрансляция по байту
+     */
     public void setRetransmitByByte(boolean retransmitByByte) {
         this.isRetransmitByByte = retransmitByByte;
         if (retransmitByByte && isRetransmit) {
@@ -110,6 +167,10 @@ public class TrueJsscListener {
         }
     }
 
+    /**
+     * Переодит собщение, находящеется в буффере, являющимся списком, к массиву
+     * @return массив сообщения из буфера
+     */
     private int[] toArray() {
         int[] array;
         int i;
@@ -128,6 +189,10 @@ public class TrueJsscListener {
         return array;
     }
 
+    /**
+     * Выводит в установленный поток вывода принимаемцый массив
+     * @param array массив для вывода
+     */
     private void outIntArray(int[] array) {
         for (int i = 0; i < array.length; i++) {
             out.print(array[i] + " ");
@@ -135,6 +200,9 @@ public class TrueJsscListener {
         out.println("");
     }
 
+    /**
+     * Пересылает полученное сообщение, собранное в буфере на указанный порт
+     */
     private void retransmit() {
         if (buffer == null) {
             return;
@@ -154,11 +222,18 @@ public class TrueJsscListener {
         }
     }
 
+    /**
+     * Выводит в поток вывода сообщение о том, что принято сообщение и ыводит это сообщение
+     */
     public void acceptMsg() {
         out.print(outPrefix() + "acm: ");
         outIntArray(toArray());
     }
 
+    /**
+     * Соытие того, что долгое время (STEP в классе Whiler) ничего не приходило. По получению этого события
+     * сообщение, сформированное в буфере считается полученым и при необходимости происходит его ретрансляция.
+     */
     public void noAcceptLongTime() {
         //out.println(outPrefix() + "Nol Long Time Event Event.");
         if (isPackage) {
@@ -173,6 +248,11 @@ public class TrueJsscListener {
         isPackage = false;
     }
 
+    /**
+     * Событие принятия сообщения. переаваемого из PortEventListener. Метод читает массив int ом и
+     * обрабатывает их, в зависимости от установленных флагов
+     * @param event переменная события
+     */
     public void accept(SerialPortEvent event) {
         try {
             int[] input = port.readIntArray(event.getEventValue());//), TIMEOUT);
